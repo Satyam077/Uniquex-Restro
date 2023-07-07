@@ -1,35 +1,34 @@
-using AbbyWeb.Data;
-using AbbyWeb.Model;
+
+using Abby.DataAccess.Data;
+using Abby.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NuGet.Protocol;
 
-namespace AbbyWeb.Pages.Categories
+namespace AbbyWeb.Pages.Admin.FoodTypes
 {
     [BindProperties]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _db;
-        public Category Category { get; set; }
+        public FoodType FoodType { get; set; }
         public EditModel(ApplicationDbContext db)
         {
             _db = db;
         }
         public void OnGet(int id)
         {
-            Category = _db.Category.Find(id);
+            FoodType = _db.FoodType.Find(id);
         }
 
-        public async Task<IActionResult> OnPost(Category category)
+        public async Task<IActionResult> OnPost(FoodType foodType)
         {
-            //custom validations
-            if(Category.Name == Category.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError(string.Empty ,"Can't be same as Name");
-            }
+          
             if(ModelState.IsValid)
             {
-                 _db.Category.Update(category);
+                 _db.FoodType.Update(foodType);
                 await _db.SaveChangesAsync();
+                TempData["success"] = "FoodType updated Successfully";
                 return RedirectToPage("Index");
             }
             return Page();

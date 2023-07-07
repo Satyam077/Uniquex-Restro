@@ -1,5 +1,5 @@
 ﻿@page
-@model AbbyWeb.Pages.Categories.EditModel
+@model AbbyWeb.Pages.Admin.Categories.EditModel
 
 <form method="post">
     <input hidden asp-for="Category.Id" />
@@ -19,8 +19,8 @@
             <input asp-for="Category.DisplayOrder" class="form-control" />
             <span asp-validation-for="Category.DisplayOrder" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:150px;">Edit</button>
-        <a asp-page="../Index" class="btn btn-secondary" style="width:150px;">Back To List</a>
+        <button type="submit" class="btn btn-primary" style="width:150px;">Update</button>
+        <a asp-page="Index" class="btn btn-secondary" style="width:150px;">Back To List</a>
     </div>
 </form>
 
