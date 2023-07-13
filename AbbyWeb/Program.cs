@@ -1,5 +1,7 @@
 using Abby.DataAccess;
 using Abby.DataAccess.Data;
+using Abby.DataAccess.Repository;
+using Abby.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     builder.Configuration.GetConnectionString("defaultConnection")
     ));
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,5 +33,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.MapRazorPages();
+app.MapControllers();
 
 app.Run();

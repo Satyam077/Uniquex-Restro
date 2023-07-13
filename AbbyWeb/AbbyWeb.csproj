@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Pages\Customer\" />
+    <Folder Include="wwwroot\Images\menuItems\" />
   </ItemGroup>
 
 </Project>
