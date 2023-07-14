@@ -87,7 +87,7 @@ namespace AbbyWeb.Pages.Admin.MenuItems
                 }
                 else
                 {
-                    MenuItem.Image = objFromdb.Image;
+                    MenuItem.Image = objFromdb.Image;                   
                 }
                 _unitOfWork.MenuItem.Update(MenuItem);
                 _unitOfWork.Save();

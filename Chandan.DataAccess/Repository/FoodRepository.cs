@@ -12,17 +12,14 @@ namespace Abby.DataAccess.Repository
     public class FoodRepository : Repository<FoodType>, IFoodRepository
     {
         private readonly ApplicationDbContext _db;
-
         public FoodRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
-        }
-    
+        }   
         public void Update(FoodType obj)
         {
             var objFromDb = _db.FoodType.FirstOrDefault(u => u.Id == obj.Id);
-            objFromDb.Name = obj.Name;
-            
+            objFromDb.Name = obj.Name;            
         }
     }
 }

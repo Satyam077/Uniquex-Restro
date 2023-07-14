@@ -21,6 +21,8 @@ namespace Abby.DataAccess.Repository
         {
             _db = db;
             //_db.MenuItem.Include(u => u.FoodType).Include(u => u.Category);
+            //Order By
+           // _db.MenuItem.OrderBy(u => u.Name);
             this.dbSet = db.Set<T>();
         }
 
@@ -29,25 +31,43 @@ namespace Abby.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll(string? includeproperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderby = null,
+            string ? includeproperties = null)
         {
             IQueryable < T > query = dbSet;
-            if(includeproperties != null)
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (includeproperties != null)
             {
                 foreach (var includeProperty in includeproperties.Split(
                 new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) {
                     query = query.Include(includeProperty);
                 }
             }
+            if(orderby != null) 
+            {
+                return orderby(query).ToList();
+            }
             return query.ToList();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>>? filter = null)
+        public T GetFirstOrDefault(Expression<Func<T, bool>>? filter = null, string? includeproperties = null)
         {
             IQueryable<T> query = dbSet;
             if(filter != null)
             {
                query = query.Where(filter);
+            }
+            if (includeproperties != null)
+            {
+                foreach (var includeProperty in includeproperties.Split(
+                new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
             }
             return query.FirstOrDefault();
         }

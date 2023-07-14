@@ -12,12 +12,10 @@ namespace Abby.DataAccess.Repository
     public class MenuItemRepository : Repository<MenuItem>, IMenuItemRepository
     {
         private readonly ApplicationDbContext _db;
-
         public MenuItemRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
-        }
-    
+        }   
         public void Update(MenuItem obj)
         {
             var objFromDb = _db.MenuItem.FirstOrDefault(u => u.Id == obj.Id);
