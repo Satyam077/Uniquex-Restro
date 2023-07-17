@@ -11,10 +11,11 @@ namespace Abby.DataAccess.Repository
 {
     public class UnitOfWork :IUnitOfWork
     {
+        
         private readonly ApplicationDbContext _db;
         public UnitOfWork(ApplicationDbContext db)
         {
-            _db = db;
+            _db = db;          
             Category = new CategoryRepository(_db);
             FoodType = new FoodRepository(_db);
             MenuItem = new MenuItemRepository(_db);
