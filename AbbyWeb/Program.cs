@@ -4,6 +4,8 @@ using Abby.DataAccess.Repository;
 using Abby.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Abby.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +16,17 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("defaultConnection")
     ));
-builder.Services.AddDefaultIdentity<IdentityUser>() //options => options.SignIn.RequireConfirmedAccount = true
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.AddIdentity<IdentityUser,IdentityRole>() //options => options.SignIn.RequireConfirmedAccount = true
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

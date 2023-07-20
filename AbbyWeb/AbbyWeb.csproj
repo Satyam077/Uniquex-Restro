@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,11 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Abby.Models\Abby.Models.csproj" />
+    <ProjectReference Include="..\Abby.Utility\Abby.Utility.csproj" />
     <ProjectReference Include="..\Chandan.DataAccess\Abby.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Customer\Cart\" />
     <Folder Include="wwwroot\Images\menuItems\" />
   </ItemGroup>
 

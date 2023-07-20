@@ -19,11 +19,13 @@ namespace Abby.DataAccess.Repository
             Category = new CategoryRepository(_db);
             FoodType = new FoodRepository(_db);
             MenuItem = new MenuItemRepository(_db);
+            ShoppingCart = new ShoppingCartRepository(_db);
         }
 
         public ICategoryRepository Category { get; private set; }
         public IFoodRepository FoodType { get; private set; }
         public IMenuItemRepository MenuItem { get; private set; }
+        public IShoppingCartRepository ShoppingCart { get; private set; }
 
         public void Dispose()
         {
