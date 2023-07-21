@@ -1,7 +1,7 @@
 ﻿@page
 @model AbbyWeb.Pages.Customer.Cart.SummaryModel
-@*
-@inject IOptions<Abby.Utility.StripeSettings> Stripe
+
+@*@inject IOptions<Abby.Utility.StripeSettings> Stripe*@
 @using Microsoft.Extensions.Options
 
 <form method="post">
@@ -85,12 +85,12 @@
 											<h6 class="my-0">@detail.MenuItem.Name</h6>
 											<small class="text-muted">Quantity: @detail.Count</small>
 										</div>
-										<span class="text-muted">$@(detail.MenuItem.Price * @detail.Count)</span>
+										<span class="text-muted">Rs.@(detail.MenuItem.Price * @detail.Count)</span>
 									</li>
 									}
 									<li class="list-group-item d-flex justify-content-between bg-light">
-										<small class="text-info">Total (USD)</small>
-										<strong class="text-info">$@Model.OrderHeader.OrderTotal.ToString("0.00")</strong>
+										<small class="text-info">Total (INR)</small>
+										<strong class="text-info">Rs.@Model.OrderHeader.OrderTotal.ToString("0.00")</strong>
 									</li>
 								</ul>
 							</div>
@@ -115,4 +115,4 @@
     <script src="https://js.stripe.com/v3/"></script>
 		<partial name="_ValidationScriptsPartial"/>
 	}
-}*@
+}
