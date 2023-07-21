@@ -1,7 +1,7 @@
 ﻿@page
 @model AbbyWeb.Pages.Customer.Cart.SummaryModel
 
-@*@inject IOptions<Abby.Utility.StripeSettings> Stripe*@
+@inject IOptions<Abby.Utility.StripeSettings> Stripe
 @using Microsoft.Extensions.Options
 
 <form method="post">
@@ -112,7 +112,7 @@
 @section Scripts{
 	@{
 		 <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
-    <script src="https://js.stripe.com/v3/"></script>
+         <script src="https://js.stripe.com/v3/"></script>
 		<partial name="_ValidationScriptsPartial"/>
 	}
 }

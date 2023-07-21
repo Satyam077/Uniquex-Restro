@@ -4,6 +4,7 @@ using Abby.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace AbbyWeb.Pages.Customer.Cart
@@ -40,7 +41,7 @@ namespace AbbyWeb.Pages.Customer.Cart
 			}
 
 		}
-		public void OnPost()
+		public IActionResult OnPost()
 		{
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -71,9 +72,41 @@ namespace AbbyWeb.Pages.Customer.Cart
 					};
 					_unitOfWork.OrderDetails.Add(orderDetails);														
 				}
+				int quantity = ShoppingCartList.ToList().Count;
 				_unitOfWork.ShoppingCart.RemoveRange(ShoppingCartList);
 				_unitOfWork.Save();
+
+				//Stripe payment code
+				var domain = "https://localhost:44319/";
+				var options = new SessionCreateOptions
+				{
+					LineItems = new List<SessionLineItemOptions>
+				{
+				  new SessionLineItemOptions
+				  {
+					PriceData= new SessionLineItemPriceDataOptions{
+						   UnitAmount = (long)(OrderHeader.OrderTotal*100),
+						   Currency = "inr",
+						   ProductData = new SessionLineItemPriceDataProductDataOptions
+						   {
+							   Name="Uniquex Restro",
+							   Description="Total Distinct item - "+quantity
+						   },
+					},
+					Quantity = 1
+				  },
+				},
+					Mode = "payment",
+					SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={OrderHeader.Id}",
+					CancelUrl = domain + "customer/cart/index.html",
+				};
+				var service = new SessionService();
+                Session session = service.Create(options);
+
+				Response.Headers.Add("Location", session.Url);
+				return new StatusCodeResult(303);
 			}
+			return Page();
 		}
 	}
 }
