@@ -186,6 +186,11 @@ namespace AbbyWeb.Areas.Identity.Pages.Account
                     }
                     else
                     {
+                        if(User.IsInRole(SD.ManagerRole))
+                        {
+                            TempData["success"] = "Employee Registered Successfully";
+                            return RedirectToPage("Customer/Index/Home");
+                        }
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }

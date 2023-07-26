@@ -71,39 +71,50 @@ namespace AbbyWeb.Pages.Customer.Cart
 						Count = item.Count
 					};
 					_unitOfWork.OrderDetails.Add(orderDetails);														
-				}
-				int quantity = ShoppingCartList.ToList().Count;
-				_unitOfWork.ShoppingCart.RemoveRange(ShoppingCartList);
+				}				
 				_unitOfWork.Save();
 
 				//Stripe payment code
 				var domain = "https://localhost:44319/";
 				var options = new SessionCreateOptions
 				{
-					LineItems = new List<SessionLineItemOptions>
-				{
-				  new SessionLineItemOptions
-				  {
-					PriceData= new SessionLineItemPriceDataOptions{
-						   UnitAmount = (long)(OrderHeader.OrderTotal*100),
-						   Currency = "inr",
-						   ProductData = new SessionLineItemPriceDataProductDataOptions
-						   {
-							   Name="Uniquex Restro",
-							   Description="Total Distinct item - "+quantity
-						   },
-					},
-					Quantity = 1
-				  },
-				},
+					LineItems = new List<SessionLineItemOptions>()
+				,
+					PaymentMethodTypes = new List<string> 
+					{
+						"card"
+					},				
 					Mode = "payment",
 					SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={OrderHeader.Id}",
 					CancelUrl = domain + "customer/cart/index.html",
 				};
+
+				//add line items
+				foreach(var item in ShoppingCartList)
+				{
+					var sessionLineItem = new SessionLineItemOptions
+					{
+						PriceData = new SessionLineItemPriceDataOptions
+						{
+							UnitAmount = (long)(OrderHeader.OrderTotal * 100),
+							Currency = "INR",
+							ProductData = new SessionLineItemPriceDataProductDataOptions
+							{
+								Name = item.MenuItem.Name
+								
+							},
+						},
+						Quantity = item.Count
+					};
+					options.LineItems.Add(sessionLineItem);
+				}
+				
 				var service = new SessionService();
                 Session session = service.Create(options);
-
 				Response.Headers.Add("Location", session.Url);
+				OrderHeader.SessionId = session.Id;
+				OrderHeader.PaymentIntentId = session.PaymentIntentId;
+				_unitOfWork.Save();
 				return new StatusCodeResult(303);
 			}
 			return Page();
